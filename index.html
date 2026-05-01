@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<title>ECLA — Proposal Capture · Gallagher</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,200">
+<style>
+:root {
+    --bg-1: #0B1320;
+    --bg-2: #1A1F2E;
+    --bg-3: #232A3D;
+    --txt-1: #F1F5F9;
+    --txt-2: #CBD5E1;
+    --txt-3: #94A3B8;
+    --txt-4: #64748B;
+    --border-1: rgba(241, 245, 249, 0.10);
+    --border-2: rgba(241, 245, 249, 0.18);
+    --card-bg: rgba(241, 245, 249, 0.04);
+    --card-bg-hi: rgba(241, 245, 249, 0.07);
+    --amber: #F59E0B;
+    --amber-soft: #FBBF24;
+    --sky: #60A5FA;
+    --emerald: #34D399;
+    --orange: #FB923C;
+    --red: #F87171;
+    --slate: #94A3B8;
+    --violet: #A78BFA;
+    --rose: #FB7185;
+    --teal-neutral: #5EEAD4;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+    height: 100vh; overflow: hidden;
+    font-family: Arial, "Helvetica Neue", sans-serif;
+    color: var(--txt-1);
+    background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    -webkit-font-smoothing: antialiased;
+}
+body { display: flex; }
+
+.sidebar {
+    width: 300px; flex: 0 0 300px;
+    background: rgba(11, 19, 32, 0.96);
+    border-right: 1px solid var(--border-1);
+    display: flex; flex-direction: column;
+    height: 100vh; overflow-y: auto;
+}
+.sidebar-header { padding: 24px 22px 18px; border-bottom: 1px solid var(--border-1); }
+.brand-mark { font-size: 8.5pt; letter-spacing: 0.30em; font-weight: 700; color: var(--txt-1); text-transform: uppercase; line-height: 1.5; }
+.brand-line { font-size: 7.5pt; color: var(--txt-3); margin-top: 4px; letter-spacing: 0.18em; text-transform: uppercase; }
+.brand-rule { height: 2px; width: 32px; background: var(--amber); margin-top: 14px; }
+.sidebar-badge { margin-top: 14px; display: inline-block; padding: 4px 10px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: var(--amber); font-size: 7.5pt; letter-spacing: 0.16em; text-transform: uppercase; border-radius: 3px; font-weight: 700; }
+.sidebar-client { padding: 18px 22px; border-bottom: 1px solid var(--border-1); }
+.sidebar-client .cl-name { font-size: 12pt; font-weight: 700; color: var(--txt-1); line-height: 1.18; }
+.sidebar-client .cl-sub { font-size: 8pt; color: var(--txt-3); margin-top: 4px; line-height: 1.4; }
+.sidebar-client .cl-meta { margin-top: 10px; display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 7.5pt; color: var(--txt-2); letter-spacing: 0.05em; }
+.sidebar-client .cl-meta .lbl { color: var(--txt-3); text-transform: uppercase; letter-spacing: 0.10em; }
+.sidebar-nav { padding: 12px 0; flex: 1; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 22px; cursor: pointer; border-left: 3px solid transparent; transition: all .18s ease; color: var(--txt-3); font-size: 9.5pt; user-select: none; }
+.nav-item:hover { background: rgba(241,245,249,0.03); color: var(--txt-1); }
+.nav-item.active { background: rgba(245, 158, 11, 0.07); border-left-color: var(--amber); color: var(--txt-1); }
+.nav-icon { font-family: 'Material Symbols Outlined'; font-size: 18px; color: var(--sky); width: 18px; text-align: center; }
+.nav-item.active .nav-icon { color: var(--amber); }
+.nav-num { font-size: 7pt; color: var(--txt-4); margin-left: auto; letter-spacing: 0.10em; }
+.sidebar-footer { padding: 16px 22px; border-top: 1px solid var(--border-1); font-size: 7pt; color: var(--txt-4); line-height: 1.5; letter-spacing: 0.04em; }
+.sidebar-footer strong { color: var(--txt-3); }
+
+.main { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+.progress-bar { height: 3px; background: rgba(241,245,249,0.05); position: relative; flex: 0 0 3px; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--amber), var(--sky)); transition: width .3s ease; }
+.slide-area { flex: 1; overflow-y: auto; padding: 32px 44px 40px; }
+.slide { display: none; animation: fadein .4s ease; }
+.slide.active { display: block; }
+@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.slide-eyebrow { font-size: 8pt; letter-spacing: 0.30em; color: var(--amber); text-transform: uppercase; font-weight: 700; }
+.slide-title { font-size: 24pt; font-weight: 700; color: var(--txt-1); line-height: 1.10; margin-top: 6px; letter-spacing: -0.01em; }
+.slide-sub { font-size: 11pt; color: var(--txt-2); margin-top: 10px; max-width: 60em; line-height: 1.5; }
+.slide-divider { margin: 22px 0 24px; height: 1px; background: var(--border-1); }
+
+.card { background: var(--card-bg); border: 1px solid var(--border-1); border-radius: 10px; padding: 16px 18px; position: relative; }
+.card.hi { background: var(--card-bg-hi); }
+.card-accent-amber { border-top: 3px solid var(--amber); }
+.card-accent-sky { border-top: 3px solid var(--sky); }
+.card-accent-emerald { border-top: 3px solid var(--emerald); }
+.card-accent-orange { border-top: 3px solid var(--orange); }
+.card-accent-red { border-top: 3px solid var(--red); }
+.card-accent-violet { border-top: 3px solid var(--violet); }
+.card-accent-slate { border-top: 3px solid var(--slate); }
+.card-label { font-size: 7.5pt; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber); font-weight: 700; }
+.card-title { font-size: 12pt; font-weight: 700; color: var(--txt-1); margin-top: 6px; line-height: 1.25; }
+.card-body { font-size: 9.5pt; color: var(--txt-2); line-height: 1.55; margin-top: 10px; }
+.card-body strong { color: var(--txt-1); }
+.card-body ul { list-style: none; margin-top: 6px; }
+.card-body li { position: relative; padding: 3px 0 3px 14px; }
+.card-body li::before { content: "·"; color: var(--amber); position: absolute; left: 2px; top: -1px; font-size: 14pt; line-height: 1; }
+.card-body em { color: var(--txt-3); font-style: italic; }
+
+.kpi-num { font-size: 22pt; font-weight: 800; color: var(--txt-1); letter-spacing: -0.02em; margin-top: 8px; line-height: 1; }
+.kpi-num .unit { font-size: 11pt; font-weight: 600; color: var(--amber); margin-left: 6px; letter-spacing: 0; }
+.kpi-foot { font-size: 8pt; color: var(--txt-3); margin-top: 6px; letter-spacing: 0.04em; }
+
+.g2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.g5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.g-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.g-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
+.g-3-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+
+table.tb { width: 100%; border-collapse: collapse; font-size: 9pt; margin-top: 12px; }
+table.tb th { background: rgba(241,245,249,0.04); color: var(--amber); text-align: left; padding: 8px 10px; font-size: 7.5pt; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; border-bottom: 2px solid var(--border-2); }
+table.tb td { padding: 7px 10px; border-bottom: 1px solid var(--border-1); color: var(--txt-2); vertical-align: top; }
+table.tb td.num { text-align: right; color: var(--txt-1); font-variant-numeric: tabular-nums; font-weight: 600; }
+table.tb td.bold { color: var(--txt-1); font-weight: 700; }
+table.tb tr.total td { border-top: 2px solid var(--border-2); border-bottom: none; background: rgba(245,158,11,0.05); color: var(--txt-1); font-weight: 700; }
+table.tb tr.subhead td { background: rgba(241,245,249,0.025); color: var(--sky); font-size: 7.5pt; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 10px; }
+
+/* === BADGES — 5 níveis de evidência === */
+.b { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 7pt; letter-spacing: 0.10em; text-transform: uppercase; font-weight: 700; line-height: 1.4; white-space: nowrap; }
+.b-nom { background: rgba(52,211,153,0.15); color: var(--emerald); border: 1px solid rgba(52,211,153,0.4); }
+.b-gen { background: rgba(96,165,250,0.13); color: var(--sky); border: 1px solid rgba(96,165,250,0.35); }
+.b-map { background: rgba(167,139,250,0.13); color: var(--violet); border: 1px solid rgba(167,139,250,0.35); }
+.b-not { background: rgba(248,113,113,0.13); color: var(--red); border: 1px solid rgba(248,113,113,0.35); }
+.b-req { background: rgba(251,146,60,0.13); color: var(--orange); border: 1px solid rgba(251,146,60,0.35); }
+
+/* RFP-attendance status (red flags) */
+.b-att { background: rgba(52,211,153,0.15); color: var(--emerald); border: 1px solid rgba(52,211,153,0.4); }
+.b-par { background: rgba(96,165,250,0.13); color: var(--sky); border: 1px solid rgba(96,165,250,0.35); }
+.b-nid { background: rgba(248,113,113,0.13); color: var(--red); border: 1px solid rgba(248,113,113,0.35); }
+.b-conf { background: rgba(251,113,133,0.16); color: var(--rose); border: 1px solid rgba(251,113,133,0.4); }
+.b-rcc { background: rgba(251,146,60,0.13); color: var(--orange); border: 1px solid rgba(251,146,60,0.35); }
+
+.legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.legend .b { font-size: 6.5pt; letter-spacing: 0.12em; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 8pt; color: var(--txt-3); }
+
+.pull { padding: 16px 20px; margin: 16px 0; border-left: 3px solid var(--amber); background: rgba(245,158,11,0.05); font-size: 11pt; color: var(--txt-1); line-height: 1.55; border-radius: 0 6px 6px 0; }
+.pull strong { color: var(--amber); }
+
+.callout { padding: 14px 16px; margin: 12px 0; border-radius: 6px; background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.25); font-size: 9.5pt; color: var(--txt-2); line-height: 1.5; }
+.callout.warn { background: rgba(251,146,60,0.06); border-color: rgba(251,146,60,0.28); }
+.callout.info { background: rgba(96,165,250,0.05); border-color: rgba(96,165,250,0.22); }
+.callout.note { background: rgba(167,139,250,0.05); border-color: rgba(167,139,250,0.22); }
+.callout strong { color: var(--txt-1); }
+
+.section-head { font-size: 10pt; color: var(--sky); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; margin: 22px 0 10px; }
+.section-head-amber { color: var(--amber); }
+
+.cover-wrap { display: flex; flex-direction: column; justify-content: center; min-height: 56vh; max-width: 60em; }
+.cover-mark { font-size: 9pt; letter-spacing: 0.40em; color: var(--amber); font-weight: 700; text-transform: uppercase; }
+.cover-h { font-size: 36pt; line-height: 1.0; font-weight: 700; color: var(--txt-1); margin-top: 14px; letter-spacing: -0.02em; }
+.cover-sub { font-size: 15pt; color: var(--sky); margin-top: 10px; font-weight: 400; line-height: 1.25; }
+.cover-lead { font-size: 11pt; color: var(--txt-2); margin-top: 20px; line-height: 1.5; max-width: 50em; }
+.cover-lead strong { color: var(--txt-1); }
+.cover-meta { margin-top: 24px; display: grid; grid-template-columns: repeat(4, max-content); gap: 24px; border-top: 1px solid var(--border-1); padding-top: 14px; font-size: 8pt; letter-spacing: 0.14em; color: var(--txt-3); text-transform: uppercase; }
+.cover-meta .v { color: var(--txt-1); font-size: 11pt; margin-top: 4px; letter-spacing: 0.04em; text-transform: none; font-weight: 700; }
+
+.kpi-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 8px 0 14px; }
+.kpi-strip .card { padding: 12px 14px; }
+
+.country-grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 4px; margin-top: 10px; font-size: 7.5pt; }
+.country-cell { padding: 8px 4px; text-align: center; border-radius: 4px; border: 1px solid var(--border-1); }
+.country-cell .cn { font-size: 7pt; color: var(--txt-3); letter-spacing: 0.08em; text-transform: uppercase; }
+.country-cell .st { margin-top: 4px; font-size: 8.5pt; font-weight: 700; line-height: 1.2; }
+.cell-own { background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.4); }
+.cell-own .st { color: var(--emerald); }
+.cell-net { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.3); }
+.cell-net .st { color: var(--amber); }
+.cell-map { background: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.3); }
+.cell-map .st { color: var(--violet); }
+.cell-na { background: rgba(241,245,249,0.04); border-color: rgba(241,245,249,0.18); }
+.cell-na .st { color: var(--txt-4); }
+
+.cost-stack { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.cost-row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--border-1); font-size: 9pt; align-items: baseline; }
+.cost-row:last-child { border-bottom: none; }
+.cost-row .lbl { color: var(--txt-2); }
+.cost-row .val { color: var(--txt-1); text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cost-total { padding: 10px 12px; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); border-radius: 6px; margin-top: 10px; display: flex; justify-content: space-between; align-items: baseline; }
+.cost-total .lbl { font-size: 7.5pt; letter-spacing: 0.18em; color: var(--amber); text-transform: uppercase; font-weight: 700; }
+.cost-total .val { font-size: 16pt; font-weight: 800; color: var(--txt-1); font-variant-numeric: tabular-nums; }
+
+.source { font-size: 7.5pt; color: var(--txt-4); margin-top: 14px; font-style: italic; letter-spacing: 0.04em; }
+
+/* Capability matrix - more compact */
+table.tb-cap td { padding: 5px 8px; font-size: 8.5pt; }
+table.tb-cap td.bold { font-size: 9pt; }
+.cap-cell { text-align: center; }
+
+/* === v4 ADDITIONS === */
+.b-critical  { background: rgba(248,113,113,0.13); color: var(--red); border: 1px solid rgba(248,113,113,0.4); }
+.b-high      { background: rgba(251,146,60,0.13); color: var(--orange); border: 1px solid rgba(251,146,60,0.4); }
+.b-medium    { background: rgba(96,165,250,0.13); color: var(--sky); border: 1px solid rgba(96,165,250,0.35); }
+.b-blocking  { background: rgba(251,113,133,0.16); color: var(--rose); border: 1px solid rgba(251,113,133,0.45); }
+.cell-gen { background: rgba(96,165,250,0.07); border-color: rgba(96,165,250,0.3); }
+.cell-gen .st { color: var(--sky); }
+.tax-glossary { padding: 14px 18px; margin: 14px 0; background: rgba(167,139,250,0.05); border: 1px solid rgba(167,139,250,0.25); border-radius: 6px; font-size: 9pt; color: var(--txt-2); line-height: 1.55; }
+.tax-glossary .gh { color: var(--violet); font-size: 7.5pt; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+.tax-glossary table { font-size: 8.5pt; margin-top: 8px; }
+.tax-glossary table th { padding: 5px 8px; }
+.tax-glossary table td { padding: 5px 8px; }
+/* Generic .num class so <span class="num"> also gets numeric styling */
+.num { color: var(--txt-1); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.ratify-cover { padding: 40px 0; }
+.ratify-cover .broker-name { font-size: 48pt; font-weight: 800; color: var(--amber); letter-spacing: -0.02em; line-height: 1; margin-top: 18px; }
+.ratify-cover .panel-type { font-size: 14pt; color: var(--sky); margin-top: 14px; font-weight: 400; }
+.ratify-cover .submit-info { font-size: 10pt; color: var(--txt-3); margin-top: 24px; line-height: 1.6; }
+.ratify-cover .submit-info strong { color: var(--txt-1); }
+
+.item-card { background: var(--card-bg); border: 1px solid var(--border-1); border-left: 3px solid var(--amber); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-top: 12px; }
+.item-card .item-title { font-size: 10.5pt; font-weight: 700; color: var(--txt-1); }
+.item-card .item-desc { font-size: 9pt; color: var(--txt-2); margin-top: 6px; line-height: 1.55; }
+.item-card .item-status { margin-top: 10px; font-size: 8.5pt; color: var(--txt-3); }
+.item-card .item-status strong { color: var(--txt-2); }
+
+.num { color: var(--txt-1); font-variant-numeric: tabular-nums; font-weight: 600; }
+</style>
+</head>
+<body>
+<aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand-mark">Proposal Capture<br>Property LATAM RFP 2026</div>
+            <div class="brand-line">For broker review · v1</div>
+            <div class="brand-rule"></div>
+            <div class="sidebar-badge">Gallagher</div>
+        </div>
+        <div class="sidebar-client">
+            <div class="cl-name">Emergent Cold LATAM</div>
+            <div class="cl-sub">PDBI Programme · 11 countries · 99 sites</div>
+            <div class="cl-meta">
+                <span class="lbl">Submission</span><span>30 Apr 2026</span>
+                <span class="lbl">Review</span><span>1 May 2026</span>
+                <span class="lbl">Term</span><span>36 + 24 months</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav"><div class="nav-item active" onclick="goSlide(0)"><span class="nav-icon">home</span><span>00 · Cover</span></div>
+<div class="nav-item" onclick="goSlide(1)"><span class="nav-icon">rule</span><span>01 · RFP requirements</span></div>
+<div class="nav-item" onclick="goSlide(2)"><span class="nav-icon">calculate</span><span>02 · Premium values</span></div>
+<div class="nav-item" onclick="goSlide(3)"><span class="nav-icon">location_on</span><span>03 · Formal presence</span></div>
+<div class="nav-item" onclick="goSlide(4)"><span class="nav-icon">hub</span><span>04 · Operational capacity</span></div>
+<div class="nav-item" onclick="goSlide(5)"><span class="nav-icon">payments</span><span>05 · Compensation</span></div>
+<div class="nav-item" onclick="goSlide(6)"><span class="nav-icon">currency_exchange</span><span>06 · Reinsurance</span></div>
+<div class="nav-item" onclick="goSlide(7)"><span class="nav-icon">priority_high</span><span>07 · Items to clarify</span></div>
+</nav>
+        <div class="sidebar-footer">
+            <strong>Purpose</strong><br>
+            Confirm or correct the captured proposal so the analysis can be closed on a fully ratified basis. Each statement reflects the proposal as captured and is open to correction.
+        </div>
+    </aside>
+<main class="main">
+  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:12.5%"></div></div>
+  <div class="slide-area">
+<div class="slide active" id="s0">
+  <div class="ratify-cover">
+    <div class="cover-mark">ECLA · PROPERTY LATAM RFP 2026 · PROPOSAL CAPTURE</div>
+    <div class="broker-name">Gallagher</div>
+    <div class="panel-type">Proposal capture — Gallagher (commercial proposal not located)</div>
+    <div class="submit-info">
+      <strong>Proposal submitted:</strong> 30 Apr 2026<br>
+      <strong>Internal review completed:</strong> 1 May 2026<br><br>
+      This panel summarises Gallagher's declared proposal as captured by Emergent Cold Latam's
+      internal review. Please confirm or correct each statement.
+      A separate document in Portuguese contains the additional clarification questions associated with this proposal.
+    </div>
+  </div>
+
+  <div class="cover-meta">
+    <div>RFP scope<div class="v">PDBI · 11 LATAM countries</div></div>
+    <div>Quoting basis<div class="v">USD 7.43M (POLICIES SCHEDULE)</div></div>
+    <div>Term<div class="v">36 + 24 months</div></div>
+    <div>Status<div class="v">Internal working draft</div></div>
+  </div>
+</div>
+<div class="slide" id="s1">
+  <div class="slide-eyebrow">01 · What the RFP required</div>
+  <div class="slide-title">Three assessment dimensions</div>
+  <div class="slide-sub">Compact summary of the formal RFP requirements (rev. 25 Mar 2026).</div>
+
+  <div class="g3" style="margin-top:18px;">
+    <div class="card card-accent-amber">
+      <div class="card-label">Compliance</div>
+      <div class="card-title">Unified PDBI programme</div>
+      <div class="card-body">
+        <ul>
+          <li>Master Policy + local fronting</li>
+          <li>11 minimum All Risks coverages</li>
+          <li>CAR Facility for greenfields (LEG 3 + ALOP)</li>
+          <li>Min. 2 loss adjusters per local policy</li>
+          <li>Min. 1 inspection per site during the contract</li>
+          <li>Reinsurance panel transparency with % share</li>
+          <li>Compliance with Brazilian Insurance Law 15.040/2024</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card card-accent-sky">
+      <div class="card-label">Network</div>
+      <div class="card-title">Coverage in 11 countries</div>
+      <div class="card-body">
+        <strong>Minimum:</strong> 3 senior professionals (1 per sub-region):
+        <ul>
+          <li>Southern Cone · BR/UY/PY · base SP or Curitiba</li>
+          <li>Andean · CL/CO/PE/EC · base Santiago or Bogotá</li>
+          <li>Mexico &amp; Caribbean · MX/PA/GT/RD · base Monterrey or Mexico City</li>
+        </ul>
+        <strong>Tie-breaker:</strong> own offices or legal representatives in the 11 countries.
+      </div>
+    </div>
+    <div class="card card-accent-emerald">
+      <div class="card-label">Cost</div>
+      <div class="card-title">Hybrid compensation model</div>
+      <div class="card-body">
+        <ul>
+          <li><strong>Brazil</strong> = fixed service fee + Success Fee Clause (no direct commission)</li>
+          <li><strong>10 countries</strong> = brokerage commission % embedded in policy (gross)</li>
+          <li><strong>Success Fee</strong> = % of savings vs 2025 (broker-proposed)</li>
+          <li><strong>Mandatory</strong> disclosure of reinsurance panel + reinsurance commission</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="slide" id="s2">
+  <div class="slide-eyebrow">02 · Premium values (POLICIES SCHEDULE)</div>
+  <div class="slide-title">Quoting basis sent to the brokers</div>
+  <div class="slide-sub">Country-by-country premium and Values at Risk used as the formal RFP quoting basis (POLICIES SCHEDULE annex, April 2026).</div>
+
+  <table class="tb">
+    <thead>
+      <tr><th>Country</th><th># Pol</th><th>Values at Risk USD</th><th>LMI USD</th><th>Premium USD</th><th>% premium</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="bold">Brazil</td><td class="num">1</td><td class="num">562,156,747</td><td class="num">562,156,747</td><td class="num">2,673,649</td><td class="num">36.0%</td></tr>
+      <tr><td class="bold">Chile</td><td class="num">4</td><td class="num">373,250,544</td><td class="num">375,925,447</td><td class="num">1,965,599</td><td class="num">26.5%</td></tr>
+      <tr><td class="bold">Mexico</td><td class="num">1</td><td class="num">370,032,113</td><td class="num">370,032,113</td><td class="num">836,680</td><td class="num">11.3%</td></tr>
+      <tr><td class="bold">Dominican R.</td><td class="num">2</td><td class="num">65,138,555</td><td class="num">65,138,555</td><td class="num">591,843</td><td class="num">8.0%</td></tr>
+      <tr><td class="bold">Peru</td><td class="num">1</td><td class="num">173,130,942</td><td class="num">66,000,000</td><td class="num">411,011</td><td class="num">5.5%</td></tr>
+      <tr><td class="bold">Colombia</td><td class="num">3</td><td class="num">228,520,292</td><td class="num">228,520,292</td><td class="num">341,823</td><td class="num">4.6%</td></tr>
+      <tr><td class="bold">Uruguay</td><td class="num">2</td><td class="num">129,222,958</td><td class="num">129,222,958</td><td class="num">201,187</td><td class="num">2.7%</td></tr>
+      <tr><td class="bold">Panama</td><td class="num">1</td><td class="num">78,310,948</td><td class="num">78,310,948</td><td class="num">135,674</td><td class="num">1.8%</td></tr>
+      <tr><td class="bold">Guatemala</td><td class="num">2</td><td class="num">84,975,969</td><td class="num">84,975,969</td><td class="num">106,251</td><td class="num">1.4%</td></tr>
+      <tr><td class="bold">Ecuador</td><td class="num">1</td><td class="num">52,754,170</td><td class="num">52,754,170</td><td class="num">104,698</td><td class="num">1.4%</td></tr>
+      <tr><td class="bold">Paraguay</td><td class="num">1</td><td class="num">26,808,134</td><td class="num">26,808,134</td><td class="num">57,505</td><td class="num">0.8%</td></tr>
+      <tr class="total"><td class="bold">TOTAL</td><td class="num">19</td><td class="num">2,144,301,372</td><td class="num">2,039,845,333</td><td class="num">7,425,920</td><td class="num">100%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout note">
+    <strong>Source.</strong> ECLA - INFORMAÇÕES PARA RFP - SEGURO PROPERTY LATAM.xlsx · POLICIES SCHEDULE annex sent
+    to the five brokers in April 2026. This is the formal premium basis on which the proposal was constructed.
+  </div>
+</div>
+<div class="slide" id="s3">
+  <div class="slide-eyebrow">03 · Your formal presence</div>
+  <div class="slide-title">Network footprint as captured</div>
+  <div class="slide-sub">Country-by-country presence declared by Gallagher Brazil in the proposal documents.</div>
+
+  <div class="card card-accent-amber" style="margin-top:14px;">
+    <div class="card-body">
+      Own offices declared: Brazil (5 offices — SP · RJ · BH · Curitiba · Goiânia) · Chile (8 offices) · Colombia (6 offices) · Peru (5 offices). Mexico classified as 'minority stake partner' rather than full ownership. Caribbean described generically as '10 islands'. The remaining 5 countries (UY · PY · EC · GT · PA) are not distinguished in the proposal text.
+    </div>
+    <div class="country-grid"><div class="country-cell cell-own"><div class="cn">BR</div><div class="st">Own</div></div><div class="country-cell cell-own"><div class="cn">CL</div><div class="st">Own</div></div><div class="country-cell cell-own"><div class="cn">CO</div><div class="st">Own</div></div><div class="country-cell cell-na"><div class="cn">EC</div><div class="st">—</div></div><div class="country-cell cell-na"><div class="cn">GT</div><div class="st">—</div></div><div class="country-cell cell-net"><div class="cn">MX</div><div class="st">Minority</div></div><div class="country-cell cell-na"><div class="cn">PA</div><div class="st">—</div></div><div class="country-cell cell-na"><div class="cn">PY</div><div class="st">—</div></div><div class="country-cell cell-own"><div class="cn">PE</div><div class="st">Own</div></div><div class="country-cell cell-gen"><div class="cn">RD</div><div class="st">Caribbean (Gen.)</div></div><div class="country-cell cell-na"><div class="cn">UY</div><div class="st">—</div></div></div>
+  </div>
+
+  <div class="callout info">
+    <strong>Legend.</strong>
+    <span class="b b-nom">Named</span> own office or named local partner ·
+    <span class="b b-gen">Generic statement</span> declared without naming structure ·
+    <span class="b b-map">Map-based</span> inferred from visual map only ·
+    <span class="b b-not">Not identified</span> not found in the proposal text.
+  </div>
+</div>
+<div class="slide" id="s4">
+  <div class="slide-eyebrow">04 · Your operational capacity</div>
+  <div class="slide-title">Operational accountability as captured</div>
+  <div class="slide-sub">Roles and accountability declared in the proposal of Gallagher Brazil.</div>
+
+  <table class="tb tb-cap">
+        <thead><tr><th>Operational function</th><th>Proposal declaration</th><th>Evidence</th></tr></thead>
+        <tbody><tr><td class="bold">CCO</td><td>Rafael Pol</td><td><span class="b b-nom">Named</span></td></tr><tr><td class="bold">CBO</td><td>Daniela Reia</td><td><span class="b b-nom">Named</span></td></tr><tr><td class="bold">Country Manager BR</td><td>Luiz Araripe</td><td><span class="b b-nom">Named</span></td></tr><tr><td class="bold">Southern Cone Lead</td><td>Alexandre Werneck (SP)</td><td><span class="b b-nom">Named</span></td></tr><tr><td class="bold">Andean Lead</td><td>Nicolas Araos (Santiago)</td><td><span class="b b-nom">Named</span></td></tr><tr><td class="bold">Mexico &amp; Caribbean Lead</td><td>Mario Galvez (MX)</td><td><span class="b b-nom">Named</span></td></tr><tr><td class="bold">Reinsurance Lead</td><td>Gallagher Re (own arm)</td><td><span class="b b-nom">Named</span></td></tr><tr><td class="bold">SLA / digital platform</td><td>CORE360 + Drive · Brazilian Insurance Law 15.040/2024 declared</td><td><span class="b b-nom">Named</span></td></tr><tr><td class="bold">Detailed CVs in document</td><td>18 CVs (Appendix)</td><td><span class="b b-nom">Named</span></td></tr><tr><td class="bold">LATAM cold-chain references</td><td>Cargill · BRF · Friogan · Ransa · Italcol</td><td><span class="b b-nom">Named</span></td></tr></tbody>
+    </table>
+
+  <div class="callout note">
+    <strong>Note.</strong> This table captures the declarations made in the proposal. Items classified as
+    "Not identified" or "Generic" indicate that the proposal text was not specific enough to allow direct
+    confirmation; they are treated as items requiring clarification (slide 07), not as gaps in the firm's
+    actual operational capacity.
+  </div>
+</div>
+<div class="slide" id="s5">
+  <div class="slide-eyebrow">05 · Your declared compensation</div>
+  <div class="slide-title">Commercial proposal not yet received — technical proposal only</div>
+  <div class="slide-sub">Captured by Emergent Cold Latam from the proposal submitted on 30 April 2026.</div>
+
+  <div class="section-head">Components as captured</div>
+  <table class="tb">
+    <thead><tr><th style="width:40%">Component</th><th>Captured value</th></tr></thead>
+    <tbody><tr><td class="bold">Coordination fee Brazil</td><td>Not identified · pending commercial proposal</td></tr><tr><td class="bold">Brokerage commission % per country</td><td>Not identified · pending commercial proposal</td></tr><tr><td class="bold">Success fee</td><td>Not identified · pending commercial proposal</td></tr><tr><td class="bold">Reinsurance commission</td><td>Not identified · Gallagher Re mentioned as own arm</td></tr><tr><td class="bold">Override / contingent</td><td>Not identified</td></tr><tr><td class="bold">Risk Assessment stages 01-03</td><td>Offered with no additional declared cost</td></tr><tr><td class="bold">11 minimum coverages (itemized)</td><td>Declared in 1-by-1 itemized checklist</td></tr><tr><td class="bold">CAR Facility (LEG 3 + ALOP)</td><td>Declared explicitly</td></tr><tr><td class="bold">Lei 15.040/2024 compliance</td><td>Declared explicitly</td></tr></tbody>
+  </table>
+
+  <div class="card card-accent-emerald" style="margin-top:14px;">
+    <div class="card-label">Total declared (year 1)</div>
+    <div class="card-title" style="font-size:13pt; margin-top:4px;">Not determinable — no commercial proposal located in the analyzed documents</div>
+  </div>
+</div>
+<div class="slide" id="s6">
+  <div class="slide-eyebrow">06 · Reinsurance economic transparency</div>
+  <div class="slide-title">Reinsurance structure as captured</div>
+  <div class="slide-sub">Reinsurance components declared by Gallagher Brazil in the proposal documents.</div>
+
+  <table class="tb">
+    <thead>
+      <tr>
+        <th>Reinsurance broker named</th>
+        <th>Commission %</th>
+        <th>Panel</th>
+        <th>Participation %</th>
+        <th>Facilities</th>
+        <th>Other compensation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="b b-nom">Gallagher Re (own arm)</span></td>
+        <td><span class="b b-not">Not identified</span></td>
+        <td><span class="b b-par">Munich Re Synd · Dale · Inigo</span></td>
+        <td><span class="b b-not">Not identified</span></td>
+        <td><span class="b b-not">Not identified</span></td>
+        <td><span class="b b-not">Not identified</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn" style="margin-top:14px;">
+    <strong>Disclosure scope.</strong> The RFP requires (item 2.6) panel + reinsurance commission transparency,
+    including share % per reinsurer and disclosure of any override, brokerage on slips, facility income,
+    profit commission and contingent income. Items captured as "Not identified" or "Generic" in the row above
+    require contractual confirmation before the final decision matrix is prepared.
+  </div>
+</div>
+<div class="slide" id="s7">
+  <div class="slide-eyebrow">07 · Items to clarify or confirm</div>
+  <div class="slide-title">Specific points to confirm or correct</div>
+  <div class="slide-sub">Each item below relates to a specific statement in slides 03 to 06 that requires written confirmation, correction, or contractual clarification.</div>
+
+  
+    <div class="item-card">
+      <div class="item-title">1. Commercial proposal</div>
+      <div class="item-desc">No commercial proposal has been located in the documents received from Gallagher. All coordination fees, commission percentages, success fee, reinsurance commission, and override structure are 'not identified.'</div>
+      <div class="item-status"><strong>Action requested:</strong> Please confirm whether a separate commercial proposal exists that has not been received, and provide the document. If the commercial component is contained in the technical proposal, please indicate the specific page or section.</div>
+    </div>
+        
+    <div class="item-card">
+      <div class="item-title">2. Network in 5 countries without textual distinction</div>
+      <div class="item-desc">5 countries (EC · GT · PA · PY · UY) appear without textual differentiation in the proposal. Mexico is classified as 'minority stake partner' rather than full ownership.</div>
+      <div class="item-status"><strong>Action requested:</strong> Please confirm in writing the formal presence in each of these countries: own office · network partner · representative · no formal presence.</div>
+    </div>
+        
+    <div class="item-card">
+      <div class="item-title">3. Caribbean coverage</div>
+      <div class="item-desc">The Caribbean is described generically as '10 islands' without country-by-country detail.</div>
+      <div class="item-status"><strong>Action requested:</strong> Please specify the formal presence in the Dominican Republic and any other Caribbean country relevant to the ECLA programme.</div>
+    </div>
+        
+
+  <div class="callout note">
+    <strong>How to respond.</strong> Please address each item in writing in the accompanying
+    Portuguese-language information request. Items left unanswered will be flagged in the final
+    decision matrix as "pending clarification".
+  </div>
+</div>
+  </div>
+</main>
+<script>
+let cur = 0;
+const total = 8;
+function goSlide(i) {
+    if (i < 0 || i >= total) return;
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('s' + i).classList.add('active');
+    document.querySelectorAll('.nav-item')[i].classList.add('active');
+    document.getElementById('progress').style.width = ((i+1)/total*100) + '%';
+    cur = i;
+    document.querySelector('.slide-area').scrollTop = 0;
+}
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') goSlide(Math.min(cur+1, total-1));
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') goSlide(Math.max(cur-1, 0));
+});
+window.addEventListener('load', () => { document.getElementById('progress').style.width = (1/total*100) + '%'; });
+</script>
+</body>
+</html>
